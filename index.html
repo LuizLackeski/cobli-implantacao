@@ -314,8 +314,6 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
 </head>
 <body>
 
-<body>
-
 <div id="login-screen" class="auth-overlay">
   <div class="auth-box">
     <div style="text-align:center; margin-bottom:20px">
@@ -332,6 +330,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
     <div id="auth-error" style="color:var(--red);font-size:11px;margin-top:10px;text-align:center"></div>
   </div>
 </div>
+
 <div id="recovery-screen" class="auth-overlay" style="z-index:10000; display:none;">
   <div class="auth-box">
     <div style="text-align:center; margin-bottom:20px">
@@ -344,6 +343,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
     <button class="auth-btn" onclick="saveNewPassword()" style="background:var(--green); color:#fff">Salvar Senha</button>
   </div>
 </div>
+
 <div class="app" id="main-app">
   
   <div id="readonly-warning" class="readonly-notice">MODO LEITURA: Apenas o dono do projeto ou gestores podem alterar estes dados.</div>
@@ -356,7 +356,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
       <span class="nav-sub">Time de Implantação</span>
       <span id="user-role-badge" class="user-badge"></span>
     </div>
-  <div class="nav-right">
+    <div class="nav-right">
       <span id="logged-user-email" style="font-size: 11px; color: rgba(255,255,255,0.7); margin-right: 8px;"></span>
       <button id="btn-gestao-usuarios" class="btn-nav-action" style="display:none" onclick="openUserModal()">⚙️ Usuários</button>
       <div class="save-pill" id="save-status">Salvo</div>
@@ -368,7 +368,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
     <button class="btn-new-proj" onclick="openNewModal()">+ novo cliente</button>
   </div>
 
-<div class="tabbar">
+  <div class="tabbar">
     <div class="tab" onclick="switchTab('dashboard',this)">Dashboard</div>
     <div class="tab active" onclick="switchTab('form',this)">Documentação do projeto</div>
     <div class="tab" onclick="switchTab('gantt',this)">Cronograma Gantt</div>
@@ -443,7 +443,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
     <div class="dash-filter">
       <label>Visualizar:</label>
       <select id="dash-filter" onchange="renderDashboard()">
-        <option value="all">Todos os projetos</option>
+        <option value="all">Todos os projects</option>
       </select>
     </div>
     <div id="dash-body"></div>
@@ -679,6 +679,22 @@ let F = {stk:[],bases:[],risks:[],costs:[],matriz:[],dados:{}};
 let G = {startDate:'',endDate:'',tasks:[]};
 window._diarioLocal = [];
 
+/* ─── SALVAR NOVA SENHA ─── */
+async function saveNewPassword() {
+  const newPassword = document.getElementById('recovery-password').value;
+  if (!newPassword || newPassword.length < 6) return alert("Digite uma senha com pelo menos 6 caracteres.");
+  
+  const { error } = await supa.auth.updateUser({ password: newPassword });
+  
+  if (error) {
+    alert("Erro ao salvar senha: " + error.message);
+  } else {
+    alert("Senha atualizada com sucesso! Você já pode usar o sistema.");
+    window.location.hash = ''; 
+    window.location.reload();  
+  }
+}
+
 /* ─── AUTENTICAÇÃO E INICIALIZAÇÃO ─── */
 async function init() {
   if (window.location.hash.includes('type=recovery')) {
@@ -687,14 +703,16 @@ async function init() {
     document.getElementById('recovery-screen').style.display = 'flex';
     return; 
   }
+
   const { data: { session } } = await supa.auth.getSession();
-   if (session) {
+  
+  if (session) {
     currentUser = session.user;
     const { data: profile } = await supa.from('profiles').select('*').eq('id', currentUser.id).single();
     userProfile = profile;
     
-    // EXIBE O E-MAIL DO USUÁRIO LOGADO NO TOPO
     document.getElementById('logged-user-email').innerText = currentUser.email;
+    
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'flex';
     document.getElementById('user-role-badge').innerText = profile?.role || 'USUÁRIO';
@@ -757,7 +775,6 @@ async function switchProject(id) {
   
   window.canEditCurrent = isOwner || isGestor;
 
-  // BUSCA E EXIBE O E-MAIL DO DONO DO PROJETO
   const { data: ownerProfile } = await supa.from('profiles').select('email').eq('id', project?.owner_id).single();
   const ownerEmail = ownerProfile?.email || 'Desconhecido';
   document.getElementById('project-owner-info').innerHTML = `Criado por:&nbsp;<b style="color:var(--navy)">${ownerEmail}</b>`;
@@ -1769,34 +1786,6 @@ function msg(t){const el=document.getElementById('smsg');el.textContent=t;setTim
 document.getElementById('modal-input').addEventListener('keydown',ev=>{if(ev.key==='Enter')createProject();if(ev.key==='Escape')closeModal();});
 document.getElementById('modal-bg').addEventListener('click',ev=>{if(ev.target===document.getElementById('modal-bg'))closeModal();});
 
-  /* ─── RECUPERAÇÃO DE SENHA ─── */
-// O Supabase avisa nosso site automaticamente se a pessoa veio do link do e-mail
-supa.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'PASSWORD_RECOVERY') {
-    // Esconde o login/app e mostra a tela de digitar nova senha
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('main-app').style.display = 'none';
-    document.getElementById('recovery-screen').style.display = 'flex';
-  }
-});
-
-// Salva a nova senha digitada no banco
-async function saveNewPassword() {
-  const newPassword = document.getElementById('recovery-password').value;
-  if (!newPassword || newPassword.length < 6) return alert("Digite uma senha com pelo menos 6 caracteres.");
-  
-  // O Supabase já te logou por trás dos panos com o link do e-mail, agora só atualizamos a senha
-  const { error } = await supa.auth.updateUser({ password: newPassword });
-  
-  if (error) {
-    alert("Erro ao salvar senha: " + error.message);
-  } else {
-    alert("Senha atualizada com sucesso! Você já pode usar o sistema.");
-    window.location.hash = ''; // Limpa aquele link feio do e-mail lá em cima
-    window.location.reload();  // Recarrega a página direto pro painel
-  }
-}
-  
 /* ─── BOOT ─── */
 init();
 </script>
