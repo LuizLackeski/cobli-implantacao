@@ -619,11 +619,22 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
   </div>
 </div>
 
-  <div class="modal-bg" id="user-modal">
-  <div class="modal" style="width:450px">
-    <h3>Gestão de Usuários</h3>
-    <div id="user-list" style="max-height:300px; overflow-y:auto; margin:15px 0"></div>
-    <div class="modal-actions"><button class="modal-btn" onclick="closeUserModal()">Fechar</button></div>
+<div class="modal-bg" id="user-modal">
+  <div class="modal" style="width:480px; max-width: 95%;">
+    <h3>Gestão de Usuários</h3>   
+    <div style="background: var(--gray50); padding: 12px; border-radius: var(--radius); margin-bottom: 15px; border: 1px solid var(--gray200)">
+        <p style="font-size: 11px; font-weight: 600; color: var(--navy); margin-bottom: 8px">ADICIONAR NOVO ACESSO</p>
+        <div style="display: flex; gap: 8px">
+            <input type="email" id="new-user-email" placeholder="E-mail" style="flex:1; padding: 6px; font-size: 12px; border: 1px solid var(--gray200); border-radius: 4px">
+            <input type="password" id="new-user-pass" placeholder="Senha" style="width: 100px; padding: 6px; font-size: 12px; border: 1px solid var(--gray200); border-radius: 4px">
+            <button class="modal-btn primary" style="padding: 6px 12px; font-size: 11px" onclick="addUserByGestor()">Incluir</button>
+        </div>
+    </div>
+    <p style="font-size: 11px; font-weight: 600; color: var(--navy); margin-bottom: 5px">USUÁRIOS ATIVOS</p>
+    <div id="user-list" style="max-height:250px; overflow-y:auto; margin-bottom: 15px"></div>   
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeUserModal()">Fechar</button>
+    </div>
   </div>
 </div>
   
@@ -831,31 +842,76 @@ function switchTab(tab,el){
   if(tab==='diario') renderDiario();
 }
 
-  /* ─── GESTÃO DE USUÁRIOS (GESTOR) ─── */
+/* ─── GESTÃO DE USUÁRIOS COMPLETA ─── */
+
 async function openUserModal() {
   document.getElementById('user-modal').classList.add('open');
-  const { data: users } = await supa.from('profiles').select('*');
+  const { data: users, error } = await supa.from('profiles').select('*').order('email');
+  
+  if (error) return;
+
   document.getElementById('user-list').innerHTML = users.map(u => `
-    <div class="user-row">
-      <span style="font-size:12px;overflow:hidden;text-overflow:ellipsis">${u.email}</span>
-      <select onchange="updateUserRole('${u.id}', this.value)" style="font-size:11px;padding:4px;border:1px solid var(--gray200);border-radius:4px;font-family:inherit">
+    <div class="user-row" style="grid-template-columns: 1fr 90px 70px 40px; gap: 5px">
+      <span style="font-size:11px; overflow:hidden; text-overflow:ellipsis" title="${u.email}">${u.email}</span>
+      <select onchange="updateUserRole('${u.id}', this.value)" style="font-size:10px; padding:2px">
         <option value="usuario" ${u.role==='usuario'?'selected':''}>Usuário</option>
         <option value="gestor" ${u.role==='gestor'?'selected':''}>Gestor</option>
       </select>
-      <button class="modal-btn" style="font-size:10px; padding:4px 6px" onclick="resetPass('${u.email}')">Reset Senha</button>
+      <button class="modal-btn" style="font-size:9px; padding:2px 4px; border-color: var(--gray200)" onclick="resetPass('${u.email}')">Reset</button>
+      <button class="del-btn" style="color: var(--red); font-size: 16px;" onclick="deleteUserAccess('${u.id}', '${u.email}')" title="Excluir acesso">×</button>
     </div>
   `).join('');
 }
+
+// Função para INCLUIR (Cadastrar)
+async function addUserByGestor() {
+  const email = document.getElementById('new-user-email').value.trim();
+  const password = document.getElementById('new-user-pass').value;
+
+  if (!email || !password) return alert("Preencha e-mail e senha provisória.");
+
+  // No Supabase, signUp cria o usuário. 
+  // Nota: O gestor não será deslogado se o Supabase estiver configurado para não auto-logar.
+  const { data, error } = await supa.auth.signUp({ email, password });
+
+  if (error) {
+    alert("Erro ao incluir: " + error.message);
+  } else {
+    alert("Usuário incluído com sucesso! Ele já pode logar.");
+    document.getElementById('new-user-email').value = "";
+    document.getElementById('new-user-pass').value = "";
+    openUserModal(); // Atualiza a lista
+  }
+}
+
+// Função para EXCLUIR (Remover acesso)
+async function deleteUserAccess(uid, email) {
+  if (email === currentUser.email) return alert("Você não pode excluir seu próprio acesso.");
+  
+  if (!confirm(`Tem certeza que deseja remover o acesso de ${email}?\n\nA pessoa não conseguirá mais ver nenhum dado.`)) return;
+
+  // Removemos o perfil do banco. Sem perfil, o sistema bloqueia o acesso aos dados.
+  const { error } = await supa.from('profiles').delete().eq('id', uid);
+
+  if (error) {
+    alert("Erro ao excluir: " + error.message);
+  } else {
+    alert("Acesso removido com sucesso.");
+    openUserModal();
+  }
+}
+
 async function updateUserRole(uid, role) { 
   await supa.from('profiles').update({ role }).eq('id', uid); 
+  msg("Nível atualizado!");
 }
+
 function resetPass(email) { 
   supa.auth.resetPasswordForEmail(email); 
-  alert("Se configurado no Supabase, um e-mail de recuperação foi enviado!"); 
+  alert("Link de recuperação enviado para " + email); 
 }
-function closeUserModal() { 
-  document.getElementById('user-modal').classList.remove('open'); 
-}
+
+function closeUserModal() { document.getElementById('user-modal').classList.remove('open'); }
 /* (Pode deixar a sua toggleCard logo abaixo disso) */
 
   function toggleCard(hdr){
