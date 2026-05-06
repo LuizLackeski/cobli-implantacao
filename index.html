@@ -103,6 +103,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2fa;color:var(--text);displ
 .f label{font-size:11px;font-weight:500;color:var(--text2);letter-spacing:.02em}
 .f input,.f select,.f textarea{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;border:1px solid var(--gray200);border-radius:var(--radius);background:var(--gray50);color:var(--text);transition:border-color .15s,background .15s;width:100%}
 .f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--blue);background:#fff}
+.f input:disabled,.f select:disabled,.f textarea:disabled{opacity:0.6;background:var(--gray100);cursor:not-allowed}
 .f textarea{resize:vertical;min-height:64px}
 .tbl-wrap{overflow-x:auto;margin-top:4px}
 table.itbl{width:100%;border-collapse:collapse;font-size:12px}
@@ -111,6 +112,7 @@ table.itbl td{padding:3px 3px;border-bottom:1px solid var(--gray100);vertical-al
 table.itbl tr:last-child td{border-bottom:none}
 table.itbl td input,table.itbl td select{width:100%;font-size:12px;font-family:'DM Sans',sans-serif;padding:5px 7px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--text)}
 table.itbl td input:focus,table.itbl td select:focus{outline:none;border-color:var(--blue);background:#fff}
+table.itbl td input:disabled,table.itbl td select:disabled{color:var(--text3);cursor:not-allowed}
 .del-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px}
 .del-btn:hover{color:var(--red);background:#fff0ee}
 .add-row{margin-top:8px;width:100%;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--blue);background:none;border:1px dashed var(--blue);border-radius:var(--radius);padding:6px;cursor:pointer;font-weight:500}
@@ -144,6 +146,7 @@ table.itbl td input:focus,table.itbl td select:focus{outline:none;border-color:v
 .gantt-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .gantt-toolbar label{font-size:12px;color:var(--text2)}
 .gantt-toolbar input[type=date],.gantt-toolbar input[type=number]{font-size:12px;font-family:'DM Sans',sans-serif;padding:6px 9px;border:1px solid var(--gray200);border-radius:var(--radius);background:var(--gray50);color:var(--text)}
+.gantt-toolbar input:disabled{opacity:0.6;cursor:not-allowed}
 .gantt-toolbar input[type=number]{width:68px}
 .btn-ghost{font-size:12px;font-family:'DM Sans',sans-serif;padding:6px 13px;border-radius:var(--radius);border:1px solid var(--gray200);background:#fff;color:var(--navy);cursor:pointer;font-weight:500}
 .btn-ghost:hover{border-color:var(--navy);background:var(--gray50)}
@@ -162,7 +165,9 @@ table.g td.dcell{position:relative;height:36px}
 table.g tr.task-tr:hover td{background:var(--gray50)}
 .tname{font-size:12px;border:none;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;outline:none}
 .tname:focus{border-bottom:1px solid var(--blue)}
+.tname:disabled{color:var(--text3);cursor:not-allowed}
 .mini-sel{font-size:11px;font-family:'DM Sans',sans-serif;border:1px solid var(--gray200);border-radius:4px;background:var(--gray50);color:var(--text);padding:1px 4px;margin-top:2px}
+.mini-sel:disabled{opacity:0.7;cursor:not-allowed}
 .del-g{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:1px 4px;border-radius:3px;flex-shrink:0}
 .del-g:hover{color:var(--red);background:#fff0ee}
 .gbar{position:absolute;border-radius:4px;cursor:grab;user-select:none}
@@ -181,6 +186,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
 .ph-tr td{background:var(--navy6)!important;border-bottom:1px solid var(--gray200)}
 .ph-name{font-size:11px;font-weight:600;color:var(--navy);letter-spacing:.03em;border:none;background:transparent;font-family:'DM Sans',sans-serif;outline:none;width:100%}
 .ph-name:focus{border-bottom:1px solid var(--blue)}
+.ph-name:disabled{color:var(--text3);cursor:not-allowed}
 .add-task-row td{border-bottom:1px solid var(--gray100)}
 .add-task-btn{font-size:11px;font-family:'DM Sans',sans-serif;color:var(--blue);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
 .add-task-btn:hover{background:var(--blue10)}
@@ -328,21 +334,21 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
 <div class="app" id="main-app">
   
   <div id="readonly-warning" class="readonly-notice">MODO LEITURA: Apenas o dono do projeto ou gestores podem alterar estes dados.</div>
-  <div class="topnav">
-    <div class="nav-brand">
-      <div class="nav-logo">
-        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#fff" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="#fff"/></svg>
-      </div>
-      <span class="nav-title">Cobli</span>
-      <span class="nav-sub">Time de Implantação</span>
+  <div class="topnav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#fff" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="#fff"/></svg>
+      </div>
+      <span class="nav-title">Cobli</span>
+      <span class="nav-sub">Time de Implantação</span>
       <span id="user-role-badge" class="user-badge"></span>
-    </div>
-    <div class="nav-right">
+    </div>
+    <div class="nav-right">
       <button id="btn-gestao-usuarios" class="btn-nav-action" style="display:none" onclick="openUserModal()">⚙️ Usuários</button>
-      <div class="save-pill" id="save-status">Salvo</div>
+      <div class="save-pill" id="save-status">Salvo</div>
       <button class="btn-nav-action" style="border-color:rgba(255,255,255,0.2)" onclick="handleLogout()">Sair</button>
-    </div>
-  </div>
+    </div>
+  </div>
 
   <div class="proj-bar" id="proj-bar">
     <button class="btn-new-proj" onclick="openNewModal()">+ novo cliente</button>
@@ -602,7 +608,7 @@ table.g tr.task-tr:hover td{background:var(--gray50)}
     <button class="btn-export secondary" onclick="exportPDF('interno')" title="Inclui custos e lições aprendidas">↓ PDF Interno</button>
     <button class="btn-export secondary" onclick="exportPDF('cliente')" title="Sem custos e lições aprendidas" style="border-color:var(--green);color:var(--green-dark)">↓ PDF Cliente</button>
     <span class="smsg" id="smsg"></span>
-    <button class="btn-export danger" onclick="deleteProject()">Excluir projeto</button>
+    <button class="btn-export danger" id="btn-delete-proj" onclick="deleteProject()">Excluir projeto</button>
   </div>
 
 </div>
@@ -659,6 +665,7 @@ window._diarioLocal = [];
 /* ─── AUTENTICAÇÃO E INICIALIZAÇÃO ─── */
 async function init() {
   const { data: { session } } = await supa.auth.getSession();
+  
   if (session) {
     currentUser = session.user;
     const { data: profile } = await supa.from('profiles').select('*').eq('id', currentUser.id).single();
@@ -705,52 +712,44 @@ async function handleLogout() { await supa.auth.signOut(); window.location.reloa
 
 /* ─── LÓGICA DE DADOS ─── */
 async function loadProjects() {
-  const { data, error } = await supa.from('projects').select('*').order('created_at');
-  if (!error && data) projects = data;
-  renderProjBar();
-}
-
-async function loadProjects() {
   const { data, error } = await supa.from('projects').select('*').order('created_at');
   if (!error && data) projects = data;
   renderProjBar();
 }
 
 async function switchProject(id) {
-  currentId = id;
-  setSaved('saving');
-  
-  const { data } = await supa.from('project_data').select('*').eq('project_id', id).single();
+  currentId = id;
+  setSaved('saving');
+  
+  const { data } = await supa.from('project_data').select('*').eq('project_id', id).single();
   const project = projects.find(p => p.id === id);
 
-  if (data) {
-    F = data.form_json || {stk:[],bases:[],risks:[],costs:[],matriz:[],dados:{}};
-    G = data.gantt_json || {startDate:'',endDate:'',tasks:[]};
-    window._diarioLocal = data.diario_json || []; 
-  } else {
-    F = {stk:[],bases:[],risks:[],costs:[],matriz:[],dados:{}};
-    G = {startDate:'',endDate:'',tasks:[]};
-    window._diarioLocal = [];
-  }
+  F = data?.form_json || {stk:[],bases:[],risks:[],costs:[],matriz:[],dados:{}};
+  G = data?.gantt_json || {startDate:'',endDate:'',tasks:[]};
+  window._diarioLocal = data?.diario_json || [];
 
-  // VERIFICAÇÃO DE PERMISSÕES
-  const isOwner = project.owner_id === currentUser.id;
+  const isOwner = project?.owner_id === currentUser.id;
   const isGestor = userProfile?.role === 'gestor';
-  const canEdit = isOwner || isGestor;
-
-  // Bloqueio visual dos inputs se não for gestor/dono
-  const inputs = document.querySelectorAll('#tab-form input, #tab-form textarea, #tab-form select, #tab-gantt input');
-  inputs.forEach(el => el.disabled = !canEdit);
-  document.getElementById('readonly-warning').style.display = canEdit ? 'none' : 'block';
   
-  // Esconde o botão de Excluir projeto se não puder editar
-  const btnDelete = document.querySelector('.btn-export.danger');
-  if(btnDelete) btnDelete.style.display = canEdit ? 'block' : 'none';
+  window.canEditCurrent = isOwner || isGestor;
 
-  renderProjBar();
-  syncFormFields(); 
-  loadG();
-  setSaved('saved');
+  renderProjBar();
+  syncFormFields(); 
+  loadG();          
+  
+  const selectors = '#tab-form input, #tab-form textarea, #tab-form select, #tab-gantt input';
+  document.querySelectorAll(selectors).forEach(el => el.disabled = !window.canEditCurrent);
+
+  document.querySelectorAll('#tab-form .add-row, #tab-gantt .btn-ghost').forEach(btn => {
+      btn.style.display = window.canEditCurrent ? 'block' : 'none';
+  });
+
+  document.getElementById('readonly-warning').style.display = window.canEditCurrent ? 'none' : 'block';
+  
+  const btnDelete = document.getElementById('btn-delete-proj');
+  if(btnDelete) btnDelete.style.display = window.canEditCurrent ? 'block' : 'none';
+
+  setSaved('saved');
 }
 
 async function persist() {
@@ -767,12 +766,11 @@ async function persist() {
 }
 
 async function createProject() {
-  const name = document.getElementById('modal-input').value.trim();
-  if (!name) return;
+  const name = document.getElementById('modal-input').value.trim();
+  if (!name) return;
 
-  // ADICIONADO owner_id AQUI:
-  const { data, error } = await supa.from('projects').insert([{ name, owner_id: currentUser.id }]).select();
-  if (!error && data.length > 0) {
+  const { data, error } = await supa.from('projects').insert([{ name, owner_id: currentUser.id }]).select();
+  if (!error && data.length > 0) {
     const newProj = data[0];
     await supa.from('project_data').insert([{ project_id: newProj.id }]);
     await loadProjects();
@@ -782,6 +780,7 @@ async function createProject() {
 }
 
 async function deleteProject(){
+  if(!window.canEditCurrent) return;
   if(projects.length===1){
     if(!confirm('Limpar todos os dados deste projeto?')) return;
     F = {stk:[],bases:[],risks:[],costs:[],matriz:[],dados:{}};
@@ -863,15 +862,12 @@ async function openUserModal() {
   `).join('');
 }
 
-// Função para INCLUIR (Cadastrar)
 async function addUserByGestor() {
   const email = document.getElementById('new-user-email').value.trim();
   const password = document.getElementById('new-user-pass').value;
 
   if (!email || !password) return alert("Preencha e-mail e senha provisória.");
 
-  // No Supabase, signUp cria o usuário. 
-  // Nota: O gestor não será deslogado se o Supabase estiver configurado para não auto-logar.
   const { data, error } = await supa.auth.signUp({ email, password });
 
   if (error) {
@@ -880,19 +876,15 @@ async function addUserByGestor() {
     alert("Usuário incluído com sucesso! Ele já pode logar.");
     document.getElementById('new-user-email').value = "";
     document.getElementById('new-user-pass').value = "";
-    openUserModal(); // Atualiza a lista
+    openUserModal();
   }
 }
 
-// Função para EXCLUIR (Remover acesso)
 async function deleteUserAccess(uid, email) {
   if (email === currentUser.email) return alert("Você não pode excluir seu próprio acesso.");
-  
   if (!confirm(`Tem certeza que deseja remover o acesso de ${email}?\n\nA pessoa não conseguirá mais ver nenhum dado.`)) return;
 
-  // Removemos o perfil do banco. Sem perfil, o sistema bloqueia o acesso aos dados.
   const { error } = await supa.from('profiles').delete().eq('id', uid);
-
   if (error) {
     alert("Erro ao excluir: " + error.message);
   } else {
@@ -912,10 +904,8 @@ function resetPass(email) {
 }
 
 function closeUserModal() { document.getElementById('user-modal').classList.remove('open'); }
-/* (Pode deixar a sua toggleCard logo abaixo disso) */
 
-  function toggleCard(hdr){
-  // 1. Fecha todos os outros cards primeiro
+function toggleCard(hdr){
   document.querySelectorAll('.card-head').forEach(otherHdr => {
     if (otherHdr !== hdr && otherHdr.classList.contains('open')) {
       otherHdr.classList.remove('open');
@@ -924,7 +914,6 @@ function closeUserModal() { document.getElementById('user-modal').classList.remo
     }
   });
 
-  // 2. Abre/Fecha o card que foi clicado
   const body = hdr.nextElementSibling;
   const chev = hdr.querySelector('.card-chev');
   const open = body.classList.toggle('open');
@@ -1018,70 +1007,66 @@ function calcFinal(){
   const el=document.getElementById('fr-final'); if(el)el.value=t-c;
 }
 
-function renderStk(){
-  document.getElementById('st-body').innerHTML=F.stk.map((s,i)=>`<tr>
-    <td><input value="${e(s.papel)}" onchange="F.stk[${i}].papel=this.value;saveF()"></td>
-    <td><input value="${e(s.nome)}" onchange="F.stk[${i}].nome=this.value;saveF()"></td>
-    <td><input value="${e(s.empresa)}" onchange="F.stk[${i}].empresa=this.value;saveF()"></td>
-    <td><input value="${e(s.tel)}" onchange="F.stk[${i}].tel=this.value;saveF()"></td>
-    <td><input value="${e(s.email)}" onchange="F.stk[${i}].email=this.value;saveF()"></td>
-    <td><button class="del-btn" onclick="F.stk.splice(${i},1);saveF();renderStk()">×</button></td>
-  </tr>`).join('');
+function renderStk(){ 
+    const html = F.stk.map((s,i)=>`<tr>
+        <td><input value="${e(s.papel)}" onchange="F.stk[${i}].papel=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(s.nome)}" onchange="F.stk[${i}].nome=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(s.empresa)}" onchange="F.stk[${i}].empresa=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(s.tel)}" onchange="F.stk[${i}].tel=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(s.email)}" onchange="F.stk[${i}].email=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td>${window.canEditCurrent ? `<button class="del-btn" onclick="F.stk.splice(${i},1);saveF();renderStk()">×</button>` : ''}</td>
+    </tr>`).join('');
+    document.getElementById('st-body').innerHTML = html;
 }
-function addStk(){F.stk.push({papel:'',nome:'',empresa:'',tel:'',email:''});saveF();renderStk();}
 
-function renderMatriz(){
-  document.getElementById('matriz-body').innerHTML=F.matriz.map((m,i)=>`<tr>
-    <td><input value="${e(m.assunto)}" onchange="F.matriz[${i}].assunto=this.value;saveF()" placeholder="Ex: Status diário"></td>
-    <td><input value="${e(m.para)}" onchange="F.matriz[${i}].para=this.value;saveF()" placeholder="Ex: Gabriel Ramires"></td>
-    <td><input value="${e(m.quando)}" onchange="F.matriz[${i}].quando=this.value;saveF()" placeholder="Ex: Diário"></td>
-    <td><input value="${e(m.como)}" onchange="F.matriz[${i}].como=this.value;saveF()" placeholder="Ex: Grupo WhatsApp"></td>
-    <td><input value="${e(m.resp)}" onchange="F.matriz[${i}].resp=this.value;saveF()" placeholder="Ex: Líder do projeto"></td>
-    <td><button class="del-btn" onclick="F.matriz.splice(${i},1);saveF();renderMatriz()">×</button></td>
-  </tr>`).join('');
+function renderMatriz(){ 
+    const html = F.matriz.map((m,i)=>`<tr>
+        <td><input value="${e(m.assunto)}" onchange="F.matriz[${i}].assunto=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(m.para)}" onchange="F.matriz[${i}].para=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(m.quando)}" onchange="F.matriz[${i}].quando=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(m.como)}" onchange="F.matriz[${i}].como=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(m.resp)}" onchange="F.matriz[${i}].resp=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td>${window.canEditCurrent ? `<button class="del-btn" onclick="F.matriz.splice(${i},1);saveF();renderMatriz()">×</button>` : ''}</td>
+    </tr>`).join('');
+    document.getElementById('matriz-body').innerHTML = html;
 }
-function addMatriz(){F.matriz.push({assunto:'',para:'',quando:'',como:'',resp:''});saveF();renderMatriz();}
 
-function renderBases(){
-  document.getElementById('base-body').innerHTML=F.bases.map((b,i)=>`<tr>
-    <td><input value="${e(b.id)}" onchange="F.bases[${i}].id=this.value;saveF()"></td>
-    <td><input value="${e(b.end)}" onchange="F.bases[${i}].end=this.value;saveF()"></td>
-    <td><input value="${e(b.resp)}" onchange="F.bases[${i}].resp=this.value;saveF()"></td>
-    <td><input value="${e(b.tel)}" onchange="F.bases[${i}].tel=this.value;saveF()"></td>
-    <td><input type="number" value="${e(b.veic)}" onchange="F.bases[${i}].veic=this.value;saveF()" style="width:60px"></td>
-    <td><input value="${e(b.prod)}" onchange="F.bases[${i}].prod=this.value;saveF()"></td>
-    <td><button class="del-btn" onclick="F.bases.splice(${i},1);saveF();renderBases()">×</button></td>
-  </tr>`).join('');
+function renderBases(){ 
+    const html = F.bases.map((b,i)=>`<tr>
+        <td><input value="${e(b.id)}" onchange="F.bases[${i}].id=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(b.end)}" onchange="F.bases[${i}].end=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(b.resp)}" onchange="F.bases[${i}].resp=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(b.tel)}" onchange="F.bases[${i}].tel=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input type="number" value="${b.veic}" onchange="F.bases[${i}].veic=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td>${window.canEditCurrent ? `<button class="del-btn" onclick="F.bases.splice(${i},1);saveF();renderBases()">×</button>` : ''}</td>
+    </tr>`).join('');
+    document.getElementById('base-body').innerHTML = html;
 }
-function addBase(){F.bases.push({id:'',end:'',resp:'',tel:'',veic:'',prod:''});saveF();renderBases();}
 
-function renderRisks(){
-  document.getElementById('risk-body').innerHTML=F.risks.map((r,i)=>`<tr>
-    <td><select onchange="F.risks[${i}].tipo=this.value;saveF()" style="width:85px">
-      <option ${r.tipo==='Risco'?'selected':''}>Risco</option>
-      <option ${r.tipo==='Premissa'?'selected':''}>Premissa</option>
-    </select></td>
-    <td><input value="${e(r.desc)}" onchange="F.risks[${i}].desc=this.value;saveF()"></td>
-    <td><input value="${e(r.imp)}" onchange="F.risks[${i}].imp=this.value;saveF()"></td>
-    <td><input value="${e(r.mit)}" onchange="F.risks[${i}].mit=this.value;saveF()"></td>
-    <td><button class="del-btn" onclick="F.risks.splice(${i},1);saveF();renderRisks()">×</button></td>
-  </tr>`).join('');
+function renderRisks(){ 
+    const html = F.risks.map((r,i)=>`<tr>
+        <td><select onchange="F.risks[${i}].tipo=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}>
+            <option ${r.tipo==='Risco'?'selected':''}>Risco</option>
+            <option ${r.tipo==='Premissa'?'selected':''}>Premissa</option>
+        </select></td>
+        <td><input value="${e(r.desc)}" onchange="F.risks[${i}].desc=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(r.imp)}" onchange="F.risks[${i}].imp=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td><input value="${e(r.mit)}" onchange="F.risks[${i}].mit=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+        <td>${window.canEditCurrent ? `<button class="del-btn" onclick="F.risks.splice(${i},1);saveF();renderRisks()">×</button>` : ''}</td>
+    </tr>`).join('');
+    document.getElementById('risk-body').innerHTML = html;
 }
-function addRisk(){F.risks.push({tipo:'Risco',desc:'',imp:'',mit:''});saveF();renderRisks();}
 
 function renderCosts(){
-  document.getElementById('cost-body').innerHTML=F.costs.map((c,i)=>{
-    const catOpts=CATS.map(ct=>`<option value="${ct}" ${c.cat===ct?'selected':''}>${ct}</option>`).join('');
-    const stOpts=STATS.map(st=>`<option value="${st}" ${c.status===st?'selected':''}>${st}</option>`).join('');
-    return `<tr style="${c.cat==='Adesão'?'background:var(--green10)':''}">
-      <td><input value="${e(c.desc)}" onchange="F.costs[${i}].desc=this.value;saveF();calcCosts()" placeholder="Ex: Prestador JTK"></td>
-      <td><select onchange="F.costs[${i}].cat=this.value;saveF();renderCosts()">${catOpts}</select></td>
-      <td><select onchange="F.costs[${i}].status=this.value;saveF();renderCosts()">${stOpts}</select></td>
-      <td><input type="number" value="${c.val||''}" onchange="F.costs[${i}].val=parseFloat(this.value)||0;saveF();calcCosts()" style="text-align:right"></td>
-      <td><input type="date" value="${e(c.data)}" onchange="F.costs[${i}].data=this.value;saveF()" style="font-size:11px;padding:4px 6px"></td>
-      <td><button class="del-btn" onclick="F.costs.splice(${i},1);saveF();renderCosts()">×</button></td>
-    </tr>`;
-  }).join('');
+  const html = F.costs.map((c,i)=>`<tr>
+      <td><input value="${e(c.desc)}" onchange="F.costs[${i}].desc=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+      <td><select onchange="F.costs[${i}].cat=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}>${CATS.map(ct=>`<option ${c.cat===ct?'selected':''}>${ct}</option>`).join('')}</select></td>
+      <td><select onchange="F.costs[${i}].status=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}>${STATS.map(st=>`<option ${c.status===st?'selected':''}>${st}</option>`).join('')}</select></td>
+      <td><input type="number" value="${c.val}" onchange="F.costs[${i}].val=parseFloat(this.value)||0;saveF();calcCosts()" ${!window.canEditCurrent?'disabled':''}></td>
+      <td><input type="date" value="${c.data}" onchange="F.costs[${i}].data=this.value;saveF()" ${!window.canEditCurrent?'disabled':''}></td>
+      <td>${window.canEditCurrent ? `<button class="del-btn" onclick="F.costs.splice(${i},1);saveF();renderCosts()">×</button>` : ''}</td>
+  </tr>`).join('');
+  document.getElementById('cost-body').innerHTML = html;
   calcCosts();
 }
 function addCost(){F.costs.push({desc:'',cat:'Prestador',status:'Pendente',val:0,data:''});saveF();renderCosts();}
@@ -1151,14 +1136,15 @@ function dateToIdx(days,dateStr){
 function isWk(d){return d.getDay()===0||d.getDay()===6;}
 const CELL=26,LCOL=220;
 
-function renderG(){
-  if(!G.startDate||!G.endDate){ document.getElementById('gw').innerHTML=`<div class="gantt-empty"><p>Defina as datas de início e fim do projeto no topo.</p></div>`; return; }
-  const days=gdays();
-  if(!days.length){ document.getElementById('gw').innerHTML=`<div class="gantt-empty"><p>Data de fim deve ser posterior ao início.</p></div>`; return; }
+function renderG(){ 
+  const days = []; const s = new Date(G.startDate+'T00:00:00'); const en = new Date(G.endDate+'T00:00:00');
+  if(!G.startDate || isNaN(s)) { document.getElementById('gw').innerHTML="<div class='gantt-empty'>Defina as datas.</div>"; return; }
+  for(let d=new Date(s); d<=en; d.setDate(d.getDate()+1)) days.push(new Date(d));
+  
   const toff=todayOff(days);
 
   if(!G.tasks.length){
-    document.getElementById('gw').innerHTML=`<div class="gantt-empty"><p>Nenhuma fase ainda.</p><button class="btn-ghost" onclick="addPhase()">+ adicionar primeira fase</button></div>`;
+    document.getElementById('gw').innerHTML=`<div class="gantt-empty"><p>Nenhuma fase ainda.</p>` + (window.canEditCurrent ? `<button class="btn-ghost" onclick="addPhase()">+ adicionar primeira fase</button>` : ``) + `</div>`;
     return;
   }
 
@@ -1173,8 +1159,10 @@ function renderG(){
   G.tasks.forEach((t,ti)=>{
     if(t.type==='phase'){
       const pc=days.map(()=>`<td class="dcell" style="background:var(--navy6)"></td>`).join('');
-      tbody+=`<tr class="ph-tr"><td class="tcell"><div style="display:flex;align-items:center;gap:4px"><input class="ph-name" value="${e(t.name)}" onchange="G.tasks[${ti}].name=this.value;saveG()"><button class="del-g" onclick="delGItem(${ti})">×</button></div></td>${pc}</tr>
-      <tr class="add-task-row"><td class="tcell" colspan="${days.length+1}"><button class="add-task-btn" onclick="addTaskAfter(${ti})"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>adicionar tarefa</button></td></tr>`;
+      tbody+=`<tr class="ph-tr"><td class="tcell"><div style="display:flex;align-items:center;gap:4px"><input class="ph-name" value="${e(t.name)}" onchange="G.tasks[${ti}].name=this.value;saveG()" ${!window.canEditCurrent?'disabled':''}>` + (window.canEditCurrent ? `<button class="del-g" onclick="delGItem(${ti})">×</button>` : ``) + `</div></td>${pc}</tr>`;
+      if(window.canEditCurrent) {
+        tbody+=`<tr class="add-task-row"><td class="tcell" colspan="${days.length+1}"><button class="add-task-btn" onclick="addTaskAfter(${ti})"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>adicionar tarefa</button></td></tr>`;
+      }
       return;
     }
 
@@ -1202,33 +1190,33 @@ function renderG(){
       <td class="tcell">
         <div style="display:flex;align-items:flex-start;gap:4px">
           <div style="flex:1;min-width:0">
-            <input class="tname" value="${e(t.name)}" onchange="G.tasks[${ti}].name=this.value;saveG()">
+            <input class="tname" value="${e(t.name)}" onchange="G.tasks[${ti}].name=this.value;saveG()" ${!window.canEditCurrent?'disabled':''}>
             <div style="display:flex;gap:4px;margin-top:2px;align-items:center">
-              <input class="mini-sel" value="${e(t.base)}" placeholder="Base" onchange="G.tasks[${ti}].base=this.value;saveG()" style="width:55px;font-size:10px">
+              <input class="mini-sel" value="${e(t.base)}" placeholder="Base" onchange="G.tasks[${ti}].base=this.value;saveG()" style="width:55px;font-size:10px" ${!window.canEditCurrent?'disabled':''}>
             </div>
             <div style="display:flex;gap:6px;margin-top:2px;flex-wrap:wrap">
               <div style="display:flex;align-items:center;gap:3px">
                 <span style="font-size:9px;color:var(--blue);font-weight:600">PLAN</span>
-                <input type="date" value="${e(t.planStart)}" onchange="G.tasks[${ti}].planStart=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif">
+                <input type="date" value="${e(t.planStart)}" onchange="G.tasks[${ti}].planStart=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif" ${!window.canEditCurrent?'disabled':''}>
                 <span style="font-size:9px;color:var(--text3)">→</span>
-                <input type="date" value="${e(t.planEnd)}" onchange="G.tasks[${ti}].planEnd=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif">
+                <input type="date" value="${e(t.planEnd)}" onchange="G.tasks[${ti}].planEnd=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif" ${!window.canEditCurrent?'disabled':''}>
               </div>
               <div style="display:flex;align-items:center;gap:3px">
                 <span style="font-size:9px;color:var(--green-dark);font-weight:600">EXEC</span>
-                <input type="date" value="${e(t.execStart)}" onchange="G.tasks[${ti}].execStart=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif">
+                <input type="date" value="${e(t.execStart)}" onchange="G.tasks[${ti}].execStart=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif" ${!window.canEditCurrent?'disabled':''}>
                 <span style="font-size:9px;color:var(--text3)">→</span>
-                <input type="date" value="${e(t.execEnd)}" onchange="G.tasks[${ti}].execEnd=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif">
+                <input type="date" value="${e(t.execEnd)}" onchange="G.tasks[${ti}].execEnd=this.value;saveG();renderG()" style="font-size:9px;padding:1px 3px;border:1px solid var(--gray200);border-radius:3px;background:var(--gray50);color:var(--text);font-family:'DM Sans',sans-serif" ${!window.canEditCurrent?'disabled':''}>
               </div>
             </div>
           </div>
-          <button class="del-g" onclick="delGItem(${ti})">×</button>
+          ` + (window.canEditCurrent ? `<button class="del-g" onclick="delGItem(${ti})">×</button>` : ``) + `
         </div>
       </td>${dc}
     </tr>`;
   });
 
   document.getElementById('gw').innerHTML=`<table class="g"><colgroup>${cg}</colgroup><thead><tr>${mhdr}</tr><tr>${dhdr}</tr></thead><tbody>${tbody}</tbody></table>`;
-  attachDrag();
+  if(window.canEditCurrent) attachDrag();
 }
 
 function attachDrag(){
